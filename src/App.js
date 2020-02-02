@@ -29,8 +29,9 @@ class App extends Component {
 
     const querystring = require('querystring');
     console.log(querystring.stringify(getUsersData))
-    axios.post("Access-Control-Allow-Origin:http://45.79.228.167:8000/accounts?", querystring.stringify(getUsersData))
+    axios.post("http://45.79.228.167:8000/accounts?", querystring.stringify(getUsersData))
       .then(function (response){
+		console.log(response)
         alert('Successfully created account')
       })
 
