@@ -11,13 +11,13 @@ class Rooms extends Component {
 
       	
       	<div
-      		className = "App-header"
+      		className = "Rooms-header"
 
       	
       	>
       		<h1
 			>
-			"Rooms"</h1>
+			"Roasdfoms"</h1>
 			<button
 				style = {{ position: "absolute", marginLeft: 640
 					}}
