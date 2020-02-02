@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 import Video from "twilio-video";
+import '../rooms.css'
 
 export default class VideoComponent extends Component {
     constructor(props) {
@@ -10,6 +12,9 @@ export default class VideoComponent extends Component {
         this.identity = null;
         this.roomName = null;
         this.roomJoined = this.roomJoined.bind(this);
+        this.state = {
+            toDoc: false
+        }
     }
 
     componentDidMount() {
@@ -42,7 +47,6 @@ export default class VideoComponent extends Component {
             this.refs.roomControls.style.display = "block";
 
             // Bind button to join Room.
-                this.roomName = this.refs.roomName.value;
 
                 this.log("Joining room '" + this.roomName + "'...");
                 var connectOptions = {
@@ -68,6 +72,10 @@ export default class VideoComponent extends Component {
             };
         });
     }
+    _readDoc = () => {
+		var self = this;
+		self.setState({toDoc:true})
+	}
 
     attachTracks(tracks, container) {
         tracks.forEach((track)=> {
@@ -95,8 +103,10 @@ export default class VideoComponent extends Component {
     }
 
     detachParticipantTracks(participant) {
-        var tracks = Array.from(participant.tracks.values());
-        this.detachTracks(tracks);
+        if (this !== undefined) {
+            var tracks = Array.from(participant.tracks.values());
+            this.detachTracks(tracks);
+        }
     }
 
     log(message) {
@@ -175,23 +185,46 @@ export default class VideoComponent extends Component {
     }
 
     render() {
+        if(this.state.toDoc === true){
+			return <Redirect to='/documents'/>
+		}
         return (
-            <div>
-                <div id="remote-media"></div>
+        	<div>
+        	      <div className = "App-contact" id = "controls" >
+      	
+      	<div
+      		className = "Rooms-header"
+      		ref = "roomControls"
+
+      	
+      	>
+      		<h1
+			>
+			"Video"</h1>
+			<button
+				style = {{ position: "absolute", marginLeft: 500, 
+					}}
+				ref="buttonLeave" id = "button-leave"
+				>End Video</button>
+			</div></div>
+            <div style = {{display: "flex", justifyContents: "center", alignItems: "center", paddingLeft: 90}}>
                 <div id="controls">
                     <div id="preview">
-                        <p className="instructions">Hello</p>
                         <div ref="localMedia" id="local-media"></div>
-                        <button ref="buttonPreview" id="button-preview">Preview My Camera</button>
+                        <button ref="buttonPreview" id="button-preview">Join</button>
                     </div>
                     <div ref="roomControls">
-                        <p className="instructions">Room Name:</p>
-                        <input ref="roomName" id="room-name" type="text" placeholder="Enter a room name" />
+                        <button ref="buttonLeave" id="button-leave">Leave Room</button>                        
                         <button ref="buttonJoin" id="button-join">Join Room</button>
-                        <button ref="buttonLeave" id="button-leave">Leave Room</button>
+                        <button onClick = {() => {this._readDoc()}}>Document Room</button>
+
+                        <div ref="remoteMedia" id="remote-media"></div>
+
+
                     </div>
                     <div ref="log" id="log"></div>
                 </div>
+            </div>
             </div>
         );
     }

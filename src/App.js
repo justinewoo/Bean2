@@ -8,6 +8,7 @@ import {
 import Login from "./screens/login"
 import Rooms from "./screens/rooms"
 import VideoComponent from "./screens/VideoComponent"
+import Documents from "./screens/documents"
 
 
 // This site has 3 pages, all of which are rendered
@@ -37,9 +38,12 @@ export default function BasicExample() {
           <Route path="/rooms">
             <Rooms />
           </Route>
-		  <Route path="/video">
-			  <VideoComponent />
-		  </Route>
+          <Route path="/video">
+            <VideoComponent />
+          </Route>
+          <Route path="/documents">
+            <Documents />
+          </Route>
         </Switch>
       </div>
     </Router>
