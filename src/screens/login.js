@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import '../App.css';
 import axios from "axios"
 
@@ -6,7 +7,7 @@ import axios from "axios"
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {username: '', password: ''};
+    this.state = {username: '', password: '', toRoom: false};
 
     this.handleChange = this.handleChange.bind(this);
 
@@ -16,68 +17,41 @@ class Login extends Component {
     this.setState({[key]: event.target.value})
   }
 
-  _decideIfRegOrUser = () => {
-      var self = this;
-      self._getUser()
-
-      if(localStorage.getItem("userName") == null)
-      {
-          self._postUser()
-          self._getUser()
-	  }
-	  console.log("done")
-	  console.log(localStorage.getItem("userName"))
-  }
-
   _getUser = () => {
-	  var self = this;
-	  const getUserData = {
-		  username: self.state.username,
-		  password: self.state.password
-	  }
-
-	  const querystring = require('querystring')
-	  axios.get("http://45.79.228.167:8000/login?", querystring.stringify(getUserData))
+      var self = this;
+    //   console.log(querystring.stringify(getUserData))
+	  axios.get("http://45.79.228.167:8000/login", {
+          params: {
+              username: self.state.username,
+              password: self.state.password
+          }
+      })
 		  .then(function (response)
 		  {
-			  console.log("gay")
-			  console.log(response)
-			  if (response['data'] !== ""){
-				localStorage.setItem("userName", response['data']['username'])
-			  }else{
-                  localStorage.setItem("userName", null)
-			  }
-			  console.log(localStorage.getItem("userName"))
-
-
+			  if (response['data'] === ""){
+                const getUsersData = {
+                    username: self.state.username,
+                    password: self.state.password 
+              
+                  }
+                  const querystring = require('querystring');
+                  console.log(querystring.stringify(getUsersData))
+                  axios.post("http://45.79.228.167:8000/login?", querystring.stringify(getUsersData))
+                    .then(function (response){
+                        console.log("reee")
+                         })
+              }
+              localStorage.setItem("userName", self.state.username)
+              console.log(localStorage.getItem("userName"))
+              self.setState({toRoom:true})
 		  })
   }
 
 
-
-  _postUser = () => {
-    var self = this;
-    const getUsersData = {
-      username: self.state.username,
-      password: self.state.password 
-
-    }
-
-    
-
-    const querystring = require('querystring');
-    console.log(querystring.stringify(getUsersData))
-    axios.post("http://45.79.228.167:8000/accounts?", querystring.stringify(getUsersData))
-      .then(function (response){
-		console.log("hoe")
-		console.log(response)
-        alert('Successfully created account')
-      })
-
-
-  }
-
   render() {
+    if(this.state.toRoom === true){
+        return <Redirect to='/rooms'/>
+    }
     return (
 
       <div
@@ -159,7 +133,7 @@ class Login extends Component {
         	style = {{
         		width: 250
         		}}
-        	onClick={() => {this._postUser()}}
+        	onClick={() => {this._getUser()}}
           >
         	Login</button>
 
