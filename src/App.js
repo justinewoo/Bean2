@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Login from "./screens/login"
 import Rooms from "./screens/rooms"
+import VideoComponent from "./screens/VideoComponent"
 
 
 // This site has 3 pages, all of which are rendered
@@ -36,6 +37,9 @@ export default function BasicExample() {
           <Route path="/rooms">
             <Rooms />
           </Route>
+		  <Route path="/video">
+			  <VideoComponent />
+		  </Route>
         </Switch>
       </div>
     </Router>

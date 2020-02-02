@@ -10,7 +10,7 @@ class Login extends Component {
     this.state = {username: '', password: '', toRoom: false};
 
     this.handleChange = this.handleChange.bind(this);
-
+    console.log("hello")
   }
 
   handleChange(event, key) {
